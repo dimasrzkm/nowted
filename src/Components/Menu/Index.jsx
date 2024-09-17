@@ -21,7 +21,11 @@ const MenuHeaderWithIcon = (props) => {
 
 const MenuBody = (props) => {
   const { children } = props;
-  return <div className="flex flex-col space-y-4 overflow-auto max-h-36 ">{children}</div>;
+  return (
+    <div className="flex flex-col space-y-4 overflow-auto max-h-36 ">
+      {children}
+    </div>
+  );
 };
 
 const MenuItem = (props) => {
