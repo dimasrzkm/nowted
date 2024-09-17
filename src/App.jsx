@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import {
   HiArchiveBox,
   HiArchiveBoxXMark,
+  HiCalendarDays,
   HiDocumentText,
   HiFolderMinus,
   HiFolderOpen,
@@ -11,17 +12,38 @@ import {
   HiOutlinePencil,
   HiOutlineStar,
   HiTrash,
+  HiFolder,
 } from "react-icons/hi2";
 import DashboardSelectFragment from "./Fragments/DashboardSelectFragment";
 import ListNote from "./Components/ListNote/Index";
 import Menu from "./Components/Menu/Index";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/light.css";
+import RichText from "./Components/Slate/Index";
+
+let notes = [
+  {
+    id: 1,
+    title: "Reflection on the Month of June",
+    date: "21/06/2022",
+    folder: "Personal",
+    body: "It's hard to believe that June is already over! Looking back on the month, there were a few highlights that stand out to me.",
+  },
+  {
+    id: 2,
+    title: "Reflection on the Month of June",
+    date: "22/06/2022",
+    folder: "Personal",
+    body: "It's hard to believe that June is already over! Looking back on the month, there were a few highlights that stand out to me.",
+  },
+];
 
 function App() {
   const [newFolder, setNewFolder] = useState(false);
   const [category, setCategory] = useState([]);
 
-  const handleTest = (e) => {
-    if (e.key === "Escape" || e.key === "Enter") {
+  const handleNewFolder = (e) => {
+    if (e.key === "Enter") {
       let data;
 
       setNewFolder(false);
@@ -44,6 +66,10 @@ function App() {
       }
       localStorage.setItem("category", JSON.stringify(data));
       setCategory(data);
+    }
+
+    if (e.key === "Escape") {
+      setNewFolder(false);
     }
   };
 
@@ -107,7 +133,7 @@ function App() {
                       className="max-w-40 h-6 bg-transparent text-slate-100 focus:border-slate-100 focus:placeholder-slate-100"
                       placeholder="My New Folder"
                       autoFocus={true}
-                      onKeyDown={handleTest}
+                      onKeyDown={handleNewFolder}
                     />
                   ) : (
                     <p>My New Folder</p>
@@ -116,8 +142,8 @@ function App() {
               )}
 
               {category.length <= 0 ? (
-                <div className="flex flex-col justify-center items-center">
-                  <HiArchiveBoxXMark className="w-7 h-7 text-slate-100/40" />
+                <div className="flex items-center space-x-3">
+                  <HiArchiveBoxXMark className="w-5 h-5 text-slate-100/40" />
                   <p>Folder Kosong</p>
                 </div>
               ) : (
@@ -159,7 +185,43 @@ function App() {
 
         {/*Content Section*/}
         <div className="flex-1 bg-[#181818] text-slate-100">
-          <DashboardSelectFragment />
+          <form className="relative flex flex-col space-y-3 px-12 pt-12 pb-7 h-full">
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Title"
+              className="bg-transparent border-transparent focus:ring-0 focus:border-transparent text-slate-100 text-2xl font-medium px-0"
+            />
+
+            <div className="flex items-center border-b border-b-gray-600 pb-2 space-x-4">
+              <HiCalendarDays className="h-4 w-4 text-gray-400 font-medium" />
+              <p className="text-gray-400 font-medium">Date</p>
+              <Flatpickr
+                className="text-slate-100 w-full bg-transparent border-none focus:ring-0"
+                options={{
+                  dateFormat: "d/m/Y",
+                }}
+                placeholder="01/01/2001"
+              />
+            </div>
+
+            <div className="flex items-center border-b border-b-gray-600 pb-2 space-x-4">
+              <HiFolder className="h-4 w-4 text-gray-400 font-medium" />
+              <p className="text-gray-400 font-medium">Folder</p>
+              <select className="form-select w-full text-slate-100 bg-transparent border-none focus:ring-0 hover:cursor-pointer">
+                {category.map((item) => (
+                  <option key={item.id} className="text-slate-800">
+                    {item.tag}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <RichText />
+          </form>
+
+          {/* <DashboardSelectFragment /> */}
         </div>
       </main>
     </Fragment>
